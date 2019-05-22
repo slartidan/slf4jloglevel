@@ -7,17 +7,17 @@ public class Application {
         Logger logger = LoggerFactory.getLogger(Application.class);
 
         LogLevel level = LogLevel.ERROR;
-        level.log(logger, "It works!"); // just message, without parameter
-        level.log(logger, "Hello {}!", "world"); // with slf4j's parameter replacing
+        level.message(logger).log("It works!"); // just message, without parameter
+        level.message(logger).log("Hello {}!", "world"); // with slf4j's parameter replacing
 
         try {
             throw new RuntimeException("Oops");
         } catch (Throwable t) {
-            level.log(logger, "Exception", t);
+            level.throwable(logger).log("Exception", t);
         }
 
         if (level.isEnabled(logger)) {
-            level.log(logger, "logging is enabled");
+            level.message(logger).log("logging is enabled");
         }
     }
 }

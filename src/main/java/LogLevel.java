@@ -32,12 +32,12 @@ public enum LogLevel {
         this.isEnabledMethod = isEnabledMethod;
     }
 
-    public void log(Logger logger, String format, Object... arguments) {
-        logMethod.apply(logger).log(format, arguments);
+    public LogMethod message(Logger logger) {
+        return logMethod.apply(logger);
     }
 
-    public void log(Logger logger, String msg, Throwable t) {
-        logThrowableMethod.apply(logger).log(msg, t);
+    public LogThrowableMethod throwable(Logger logger) {
+        return logThrowableMethod.apply(logger);
     }
 
     public boolean isEnabled(Logger logger) {
