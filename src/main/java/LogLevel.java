@@ -4,23 +4,33 @@ import java.util.function.Function;
 
 public enum LogLevel {
 
-    TRACE(l -> l::trace),
-    DEBUG(l -> l::debug),
-    INFO(l -> l::info),
-    WARN(l -> l::warn),
-    ERROR(l -> l::error);
+    TRACE(l -> l::trace, l -> l::isTraceEnabled),
+    DEBUG(l -> l::debug, l -> l::isDebugEnabled),
+    INFO(l -> l::info, l -> l::isInfoEnabled),
+    WARN(l -> l::warn, l -> l::isWarnEnabled),
+    ERROR(l -> l::error, l -> l::isErrorEnabled);
 
     interface LogMethod {
         void log(String format, Object... arguments);
     }
 
-    private final Function<Logger, LogMethod> function;
+    interface IsEnabledMethod {
+        boolean isEnabled();
+    }
 
-    LogLevel(Function<Logger, LogMethod> function) {
-        this.function = function;
+    private final Function<Logger, LogMethod> logMethod;
+    private final Function<Logger, IsEnabledMethod> isEnabledMethod;
+
+    LogLevel(Function<Logger, LogMethod> logMethod, Function<Logger, IsEnabledMethod> isEnabledMethod) {
+        this.logMethod = logMethod;
+        this.isEnabledMethod = isEnabledMethod;
     }
 
     public void log(Logger logger, String format, Object... arguments) {
-        function.apply(logger).log(format, arguments);
+        logMethod.apply(logger).log(format, arguments);
+    }
+
+    public boolean isEnabled(Logger logger) {
+        return isEnabledMethod.apply(logger).isEnabled();
     }
 }
