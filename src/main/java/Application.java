@@ -10,6 +10,12 @@ public class Application {
         level.log(logger, "It works!"); // just message, without parameter
         level.log(logger, "Hello {}!", "world"); // with slf4j's parameter replacing
 
+        try {
+            throw new RuntimeException("Oops");
+        } catch (Throwable t) {
+            level.log(logger, "Exception", t);
+        }
+
         if (level.isEnabled(logger)) {
             level.log(logger, "logging is enabled");
         }
